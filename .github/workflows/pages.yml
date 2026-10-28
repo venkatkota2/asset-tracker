@@ -1,0 +1,57 @@
+name: Build research and deploy Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '30 22 * * 1-5'
+permissions:
+  contents: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      # Explicit provider switch. Real-data failures never publish simulated replacements.
+      DATA_PROVIDER: ${{ vars.DATA_PROVIDER || 'demo' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -e '.[dev]' -c requirements.lock
+      - run: python -m pytest -q
+      - run: node --check web/app.js
+      - name: Build portfolio frontier
+        env:
+          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+          FMP_REQUESTS_PER_MINUTE: ${{ vars.FMP_REQUESTS_PER_MINUTE || '120' }}
+        run: python -m indexlens.cli build --provider "$DATA_PROVIDER"
+      - name: Set source repository link
+        env:
+          SOURCE_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: python scripts/configure_frontend.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
+

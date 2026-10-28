@@ -1,0 +1,15 @@
+.venv/
+.env
+.env.*
+!.env.example
+.cache/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+data/raw/
+.DS_Store
+.openai/
+

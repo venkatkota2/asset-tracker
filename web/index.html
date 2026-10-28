@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore how a small portfolio can track a broad equity benchmark. Transparent Python optimization, interactive results, and out-of-sample evaluation.">
+  <meta name="theme-color" content="#111c24"><title>IndexLens — Less to hold. More to understand.</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css">
+  <script defer src="./config.js"></script><script defer src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to results</a>
+  <aside class="sidebar">
+    <a class="brand" href="./" aria-label="IndexLens home"><span class="brand-icon">ı<span>ı</span>ı</span> indexlens<span class="brand-dot">.</span></a>
+    <div class="workspace-label">REPLICATION STUDIO</div>
+    <nav aria-label="Main navigation">
+      <a class="nav-item active" href="#main"><span aria-hidden="true">▥</span> Overview <span class="nav-dot"></span></a>
+      <a class="nav-item" href="#tradeoff"><span aria-hidden="true">⌁</span> The trade-off</a>
+      <a class="nav-item" href="#allocation"><span aria-hidden="true">◫</span> Portfolio mix</a>
+      <button class="nav-item" data-method><span aria-hidden="true">⊞</span> Methodology</button>
+    </nav>
+    <div class="side-note"><div class="note-icon">↗</div><h3>A smaller way<br>to see the market.</h3><p>Explore the balance between portfolio simplicity and tracking precision.</p></div>
+    <div class="side-bottom"><a id="sourceLink" href="https://github.com/venkatkota2/asset-tracker" target="_blank" rel="noreferrer">View source <span>↗</span></a><span>OPEN RESEARCH · V0.1</span></div>
+  </aside>
+  <div class="page">
+    <header class="topbar"><div>Workspace <span>/</span> <strong>Index replication</strong></div><div class="top-actions"><span class="status-pill" id="dataStatus"><i></i> Loading report</span><button class="icon-button" data-method aria-label="About this research">?</button></div></header>
+    <main id="main">
+      <section class="intro"><div><div class="eyebrow">THE WHOLE PICTURE. FEWER PIECES.</div><h1>Less to hold.<br><span>More to understand.</span></h1><p>Find a compact portfolio that moves with your benchmark.<br class="desktop-only"> See exactly what you gain—and give up—with every holding.</p></div><div class="intro-art" aria-hidden="true"><div class="dot-grid"></div><span class="art-arrow">→</span><div class="compact-grid"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div><div class="art-caption">A broad market. A focused portfolio.</div></div></section>
+      <div id="notice" class="notice" role="status"><span>◈</span><p>Loading the Python-generated report…</p></div>
+      <section class="configuration panel" aria-label="Portfolio settings">
+        <div class="benchmark-field"><label for="benchmark">YOUR BENCHMARK</label><div class="select-wrap"><span class="benchmark-logo">S&P</span><select id="benchmark"><option value="sp500">S&P 500</option></select></div><small id="benchmarkHint">US large-cap equities · SPY proxy in market mode</small></div>
+        <div class="holding-field"><div class="setting-heading"><label for="holdingRange">HOLDING BUDGET</label><strong><span id="holdingNumber">—</span> <small>stocks</small></strong></div><input type="range" id="holdingRange" min="0" max="6" step="1" value="3" disabled><div class="range-labels"><span>Fewer holdings</span><span>More coverage</span></div></div>
+        <div class="auto-field"><button id="autoButton" class="primary-button" disabled><span>✧</span> Find the balance <span>↗</span></button><small>Selected on validation data</small></div>
+      </section>
+      <section class="metrics-grid" aria-label="Portfolio results" aria-live="polite">
+        <article class="metric-card"><div class="metric-label">Portfolio holdings <span>◫</span></div><div class="metric-value" id="metricHoldings">—</div><div class="metric-note" id="metricReduction">Waiting for results</div></article>
+        <article class="metric-card"><div class="metric-label">Tracking error <span title="Annualized standard deviation of daily active returns">ⓘ</span></div><div class="metric-value" id="metricError">—</div><div class="metric-note">Annualized · held-out test</div></article>
+        <article class="metric-card"><div class="metric-label">Return correlation <span>⌁</span></div><div class="metric-value" id="metricCorrelation">—</div><div class="metric-note">Daily returns · held-out test</div></article>
+        <article class="metric-card"><div class="metric-label">Return difference <span>↗</span></div><div class="metric-value" id="metricGap">—</div><div class="metric-note">Portfolio minus benchmark · test</div></article>
+      </section>
+      <section class="charts-grid">
+        <article class="panel performance-panel"><div class="panel-heading"><div><div class="eyebrow muted">THE BIG PICTURE</div><h2>Small portfolio. Similar path?</h2></div><span class="subtle-pill">Held-out test</span></div><div class="chart-meta"><div class="legend"><span><i class="line green"></i> Your portfolio</span><span><i class="line gray"></i> Benchmark</span></div><span id="performancePeriod"></span></div><div class="chart-wrap"><svg id="performanceChart" role="img" aria-label="Portfolio and benchmark wealth, indexed to 100 at test start" viewBox="0 0 700 270"></svg><div class="chart-tooltip" id="chartTooltip" hidden></div></div><div class="chart-foot"><span>Growth of 100 · after modeled trading costs</span><span id="costLabel">5 bps / traded dollar</span></div></article>
+        <article class="panel frontier-panel" id="tradeoff"><div class="panel-heading"><div><div class="eyebrow muted">FIND THE SWEET SPOT</div><h2>The trade-off</h2></div><span class="tiny-icon">↘</span></div><p class="chart-description">How much precision does another holding buy?</p><svg id="frontierChart" role="img" aria-label="Validation annualized tracking RMSE versus holding budget" viewBox="0 0 390 250"></svg><div class="recommendation"><span class="spark">✧</span><div><strong id="recommendationTitle">Calculating the balance…</strong><p id="recommendationDetail">Selection uses validation data only.</p></div></div></article>
+      </section>
+      <section class="allocation-grid" id="allocation">
+        <article class="panel holdings-panel"><div class="panel-heading"><div><div class="eyebrow muted">WHAT'S INSIDE</div><h2>Your portfolio mix <span id="tableCount" class="count-pill">—</span></h2></div><button id="exportButton" class="secondary-button" disabled>↓ Export CSV</button></div><div class="table-controls"><label class="search-wrap"><span aria-hidden="true">⌕</span><input id="searchHoldings" type="search" placeholder="Find a holding…" aria-label="Search holdings"></label><label class="capital-wrap">Illustrative capital <span>$ <input type="number" id="capital" min="1" max="1000000000" step="1000" value="10000" aria-label="Illustrative capital in USD"></span></label></div><div class="table-scroll"><table><thead><tr><th scope="col">ASSET</th><th scope="col">SECTOR</th><th scope="col" class="number">WEIGHT</th><th scope="col" class="number">ALLOCATION</th></tr></thead><tbody id="holdingsBody"><tr><td colspan="4">Loading portfolio…</td></tr></tbody></table></div><div class="table-footer"><span id="weightsDate"></span><button class="text-button" id="showAllButton" hidden>Show all holdings ↓</button></div></article>
+        <article class="panel sectors-panel"><div class="panel-heading"><div><div class="eyebrow muted">ACROSS THE MARKET</div><h2>Sector exposure</h2></div></div><div class="donut-container"><svg id="sectorChart" viewBox="0 0 220 220" role="img" aria-label="Portfolio sector allocation"></svg><div class="donut-label"><strong id="sectorCount">—</strong><span>sectors</span></div></div><div id="sectorLegend" class="sector-legend"></div><p class="small-disclosure">Weights are long-only and sum to 100%. Position caps apply at rebalancing; weights drift between rebalances.</p></article>
+      </section>
+      <section class="method-strip"><div><span class="step-number">01</span><strong>Start with the universe</strong><p>Aligned, adjusted daily returns.</p></div><div><span class="step-number">02</span><strong>Build a smaller basket</strong><p>Constrained Python optimization.</p></div><div><span class="step-number">03</span><strong>Test on unseen data</strong><p>A separate chronological holdout.</p></div><button class="text-button" data-method>Explore the methodology ↗</button></section>
+      <footer><span>indexlens. <span class="footer-tag">A study in doing more with less.</span></span><span>Research tool · not investment advice</span></footer>
+    </main>
+  </div>
+  <dialog id="methodDialog" aria-labelledby="methodTitle"><div class="dialog-top"><span class="eyebrow">TRANSPARENCY BY DESIGN</span><button id="closeMethod" class="icon-button" aria-label="Close methodology">×</button></div><h2 id="methodTitle">How the smaller portfolio is built.</h2><p>We search for a small basket whose daily returns approximate the benchmark, with no short selling and a maximum starting weight of 25% per stock.</p><ol><li><strong>Train (60%).</strong> Greedily add stocks that explain the remaining return difference. Fit fully invested, capped weights using constrained ridge least squares.</li><li><strong>Validate (20%).</strong> Normalize holding budget and tracking RMSE to the same scale. Select the point closest to the ideal of fewest holdings and lowest error, giving both equal importance. This grid-dependent balance is a transparent preference, not a global optimum.</li><li><strong>Test (20%).</strong> Freeze the support, refit weights on train + validation, and evaluate the subsequent untouched period. Test results never drive the automatic choice.</li></ol><div id="windowDetails" class="window-details"></div><h3>What the numbers mean</h3><p><strong>Tracking error:</strong> standard deviation of daily portfolio-minus-benchmark returns, annualized with √252. <strong>Tracking RMSE:</strong> root mean squared active returns, annualized with √252; also penalizes persistent daily return bias. <strong>Return difference:</strong> cumulative portfolio return minus cumulative benchmark return, in percentage points.</p><h3>Trading assumptions</h3><p id="tradingDetails"></p><h3>Data and limits</h3><ul id="warningsList"></ul><details><summary>Data-quality report</summary><pre id="qualityDetails"></pre></details><p class="small-disclosure">This is an educational research project. Historical results do not establish future tracking precision. No trade execution, tax modeling, or personalized recommendations are provided.</p></dialog>
+</body>
+</html>
