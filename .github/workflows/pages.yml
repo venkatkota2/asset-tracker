@@ -37,7 +37,6 @@ jobs:
         env:
           SOURCE_URL: ${{ github.server_url }}/${{ github.repository }}
         run: python scripts/configure_frontend.py
-      - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web
@@ -51,6 +50,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
